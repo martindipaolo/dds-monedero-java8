@@ -14,6 +14,7 @@ public class Cuenta {
   private double saldo = 0;
   private List<Movimiento> movimientos = new ArrayList<>();
   private int maximoDepositosDiarios = 3;
+  private double limiteExtraccionDiario = 1000;
 
   public Cuenta() {
     saldo = 0;
@@ -39,11 +40,8 @@ public class Cuenta {
     }
 
     this.saldo += monto;
-    this.movimientos.add(new Movimiento(LocalDate.now(), monto, true));
-
+    this.agregarMovimiento(LocalDate.now(), monto, true);
   }
-
-
 
   public void extraer(double monto) {
     if (monto <= 0) {
@@ -53,13 +51,13 @@ public class Cuenta {
       throw new SaldoMenorException("No puede extraer mas de " + getSaldo() + " $");
     }
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
-    double limite = 1000 - montoExtraidoHoy;
+    double limite = limiteExtraccionDiario - montoExtraidoHoy;
     if (monto > limite) {
-      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + 1000
+      throw new MaximoExtraccionDiarioException("No puede extraer mas de $ " + limiteExtraccionDiario
           + " diarios, límite: " + limite);
     }
     this.saldo -= monto;
-    this.movimientos.add(new Movimiento(LocalDate.now(), monto, false));
+    this.agregarMovimiento(LocalDate.now(), monto, false);
   }
 
   public void agregarMovimiento(LocalDate fecha, double monto, boolean esDeposito) {
