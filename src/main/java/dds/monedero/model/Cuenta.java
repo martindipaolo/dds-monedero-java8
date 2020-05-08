@@ -45,6 +45,12 @@ public class Cuenta {
   }
 
   public void extraer(double monto) {
+    validarExtraccion(monto);
+    this.saldo -= monto;
+    this.agregarMovimiento(LocalDate.now(), monto, false);
+  }
+
+  private void validarExtraccion(double monto) {
     if (monto <= 0) {
       throw new MontoNegativoException(monto);
     }
@@ -56,10 +62,7 @@ public class Cuenta {
     if (monto > limite) {
       throw new MaximoExtraccionDiarioException(this.limiteExtraccionDiario, limite);
     }
-    this.saldo -= monto;
-    this.agregarMovimiento(LocalDate.now(), monto, false);
   }
-
   public void agregarMovimiento(LocalDate fecha, double monto, boolean esDeposito) {
     Movimiento movimiento = new Movimiento(fecha, monto, esDeposito);
     movimientos.add(movimiento);
