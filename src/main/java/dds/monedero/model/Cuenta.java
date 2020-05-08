@@ -32,14 +32,7 @@ public class Cuenta {
 
 
   public void depositar(double monto) {
-    if (monto <= 0) {
-      throw new MontoNegativoException(monto);
-    }
-
-    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= this.maximoDepositosDiarios) {
-      throw new MaximaCantidadDepositosException(this.maximoDepositosDiarios);
-    }
-
+    validarDeposito(monto);
     this.saldo += monto;
     this.agregarMovimiento(LocalDate.now(), monto, true);
   }
@@ -50,19 +43,7 @@ public class Cuenta {
     this.agregarMovimiento(LocalDate.now(), monto, false);
   }
 
-  private void validarExtraccion(double monto) {
-    if (monto <= 0) {
-      throw new MontoNegativoException(monto);
-    }
-    if (getSaldo() - monto < 0) {
-      throw new SaldoMenorException(getSaldo());
-    }
-    double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
-    double limite = limiteExtraccionDiario - montoExtraidoHoy;
-    if (monto > limite) {
-      throw new MaximoExtraccionDiarioException(this.limiteExtraccionDiario, limite);
-    }
-  }
+
   public void agregarMovimiento(LocalDate fecha, double monto, boolean esDeposito) {
     Movimiento movimiento = new Movimiento(fecha, monto, esDeposito);
     movimientos.add(movimiento);
@@ -87,5 +68,30 @@ public class Cuenta {
   public void setSaldo(double saldo) {
     this.saldo = saldo;
   }
+
+  private void validarDeposito(double monto) {
+    if (monto <= 0) {
+      throw new MontoNegativoException(monto);
+    }
+
+    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= this.maximoDepositosDiarios) {
+      throw new MaximaCantidadDepositosException(this.maximoDepositosDiarios);
+    }
+  }
+
+  private void validarExtraccion(double monto) {
+    if (monto <= 0) {
+      throw new MontoNegativoException(monto);
+    }
+    if (getSaldo() - monto < 0) {
+      throw new SaldoMenorException(getSaldo());
+    }
+    double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
+    double limite = limiteExtraccionDiario - montoExtraidoHoy;
+    if (monto > limite) {
+      throw new MaximoExtraccionDiarioException(this.limiteExtraccionDiario, limite);
+    }
+  }
+
 
 }
