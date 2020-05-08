@@ -30,7 +30,6 @@ public class Cuenta {
   }
 
 
-
   public void depositar(double monto) {
     validarDeposito(monto);
     this.saldo += monto;
@@ -50,7 +49,6 @@ public class Cuenta {
   }
 
   public double getMontoExtraidoA(LocalDate fecha) {
-
     return getMovimientos().stream()
         .filter(movimiento -> movimiento.fueExtraido(fecha))
         .mapToDouble(Movimiento::getMonto)
