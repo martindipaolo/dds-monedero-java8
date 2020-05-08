@@ -17,28 +17,28 @@ public class MonederoTest {
   }
 
   @Test
-  public void Poner() {
-    cuenta.poner(1500);
+  public void Depositar() {
+    cuenta.depositar(1500);
   }
 
   @Test(expected = MontoNegativoException.class)
-  public void PonerMontoNegativo() {
-    cuenta.poner(-1500);
+  public void DepositarMontoNegativo() {
+    cuenta.depositar(-1500);
   }
 
   @Test
   public void TresDepositos() {
-    cuenta.poner(1500);
-    cuenta.poner(456);
-    cuenta.poner(1900);
+    cuenta.depositar(1500);
+    cuenta.depositar(456);
+    cuenta.depositar(1900);
   }
 
   @Test(expected = MaximaCantidadDepositosException.class)
   public void MasDeTresDepositos() {
-    cuenta.poner(1500);
-    cuenta.poner(456);
-    cuenta.poner(1900);
-    cuenta.poner(245);
+    cuenta.depositar(1500);
+    cuenta.depositar(456);
+    cuenta.depositar(1900);
+    cuenta.depositar(245);
   }
 
   @Test(expected = SaldoMenorException.class)
