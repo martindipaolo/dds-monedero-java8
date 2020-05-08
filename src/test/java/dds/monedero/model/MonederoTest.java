@@ -44,18 +44,18 @@ public class MonederoTest {
   @Test(expected = SaldoMenorException.class)
   public void ExtraerMasQueElSaldo() {
     cuenta.setSaldo(90);
-    cuenta.sacar(1001);
+    cuenta.extraer(1001);
   }
 
   @Test(expected = MaximoExtraccionDiarioException.class)
   public void ExtraerMasDe1000() {
     cuenta.setSaldo(5000);
-    cuenta.sacar(1001);
+    cuenta.extraer(1001);
   }
 
   @Test(expected = MontoNegativoException.class)
   public void ExtraerMontoNegativo() {
-    cuenta.sacar(-500);
+    cuenta.extraer(-500);
   }
 
 }

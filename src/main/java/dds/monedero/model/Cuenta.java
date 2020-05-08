@@ -38,12 +38,12 @@ public class Cuenta {
     new Movimiento(LocalDate.now(), monto, true).agregateA(this);
   }
 
-  public void sacar(double monto) {
+  public void extraer(double monto) {
     if (monto <= 0) {
       throw new MontoNegativoException(monto + ": el monto a ingresar debe ser un valor positivo");
     }
     if (getSaldo() - monto < 0) {
-      throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
+      throw new SaldoMenorException("No puede extraer mas de " + getSaldo() + " $");
     }
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     double limite = 1000 - montoExtraidoHoy;
