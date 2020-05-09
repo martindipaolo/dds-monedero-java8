@@ -69,18 +69,15 @@ public class Cuenta {
 
   private void validarDeposito(double monto) {
     validarMontoPositivo(monto);
-
-    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= this.maximoDepositosDiarios) {
-      throw new MaximaCantidadDepositosException(this.maximoDepositosDiarios);
-    }
+    validarLimiteDepositosDiariosExcedido();
   }
+
+
 
   private void validarExtraccion(double monto) {
     validarMontoPositivo(monto);
 
-    if (getSaldo() - monto < 0) {
-      throw new SaldoMenorException(getSaldo());
-    }
+    validarSaldoSuficiente(monto);
 
     double montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     double limite = limiteExtraccionDiario - montoExtraidoHoy;
@@ -90,11 +87,22 @@ public class Cuenta {
     }
   }
 
+  private void validarSaldoSuficiente(double monto) {
+    if (getSaldo() - monto < 0) {
+      throw new SaldoMenorException(getSaldo());
+    }
+  }
+
   private void validarMontoPositivo(double monto) {
     if (monto <= 0) {
       throw new MontoNegativoException(monto);
     }
   }
-
+  
+  private void validarLimiteDepositosDiariosExcedido() {
+    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= this.maximoDepositosDiarios) {
+      throw new MaximaCantidadDepositosException(this.maximoDepositosDiarios);
+    }
+  }
 
 }
