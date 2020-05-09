@@ -33,19 +33,18 @@ public class Cuenta {
   public void depositar(double monto) {
     validarDeposito(monto);
     this.saldo += monto;
-    this.agregarMovimiento(LocalDate.now(), monto, true);
+    this.agregarMovimiento(new Movimiento(LocalDate.now(), monto, true));
   }
 
   public void extraer(double monto) {
     validarExtraccion(monto);
     this.saldo -= monto;
-    this.agregarMovimiento(LocalDate.now(), monto, false);
+    this.agregarMovimiento(new Movimiento(LocalDate.now(), monto, false));
   }
 
 
-  public void agregarMovimiento(LocalDate fecha, double monto, boolean esDeposito) {
-    Movimiento movimiento = new Movimiento(fecha, monto, esDeposito);
-    movimientos.add(movimiento);
+  public void agregarMovimiento(Movimiento movimiento) {
+      movimientos.add(movimiento);
   }
 
   public double getMontoExtraidoA(LocalDate fecha) {
@@ -98,7 +97,7 @@ public class Cuenta {
       throw new MontoNegativoException(monto);
     }
   }
-  
+
   private void validarLimiteDepositosDiariosExcedido() {
     if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= this.maximoDepositosDiarios) {
       throw new MaximaCantidadDepositosException(this.maximoDepositosDiarios);
